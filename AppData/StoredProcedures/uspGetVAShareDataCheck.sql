@@ -1,0 +1,85 @@
+create or replace PROCEDURE USPGETVASHAREDATACHECK(
+    IN_TENANTCODE IN NVARCHAR2,
+    IN_VALVETABLE IN NVARCHAR2 DEFAULT NULL,
+    IN_OWNER IN NVARCHAR2 DEFAULT NULL,
+    IN_PLANT IN NVARCHAR2 DEFAULT NULL,
+    IN_TAGNUMBER IN NVARCHAR2 DEFAULT NULL,
+    IN_SERIALNUMBER IN NVARCHAR2 DEFAULT NULL,
+    IN_QUERYMODE IN NVARCHAR2 DEFAULT 'ALL',
+    OUT_RESULT IN OUT NVARCHAR2,
+    OUT_CURSOR OUT SYS_REFCURSOR)
+IS
+  /******************************************************************************
+  **  FILE:        uspGetVAShareDataCheck
+  **  DESCRIPTION: Check VA Share Data parameters 
+  **  RETURNS:
+  **  PARAMS:       
+  *******************************************************************************
+  **  CHANGE HISTORY
+  *******************************************************************************
+  ** Ben Song 2019/10/11       init
+  ** Ben Song 2019/10/16       add serial number condition  
+  *******************************************************************************/
+  V_REPAIRSSQL VARCHAR2(1000):= '';
+  V_TENANTKEY NVARCHAR2(100):= '';
+  V_OWNERKEY NVARCHAR2(100):= '';
+  V_PLANTKEY NVARCHAR2(100):= '';
+BEGIN
+
+  OUT_RESULT := '';
+  BEGIN
+    SELECT   UNIQUEKEY
+      INTO V_TENANTKEY
+      FROM TENANT
+      WHERE UPPER(TRIM(TENANT_CODE)) = UPPER(TRIM(IN_TENANTCODE))
+      AND ROWNUM = 1;
+  EXCEPTION
+  WHEN NO_DATA_FOUND THEN
+    OUT_RESULT:= 'ERROR: TENANT NOT EXISTS!';
+  END;
+  BEGIN
+    SELECT   UNIQUEKEY
+      INTO V_OWNERKEY
+      FROM OWNERS
+      WHERE TENANTKEY = V_TENANTKEY
+      AND UPPER(TRIM(OWNERNAME)) = UPPER(TRIM(IN_OWNER))
+      AND ROWNUM = 1;
+  EXCEPTION
+  WHEN NO_DATA_FOUND THEN
+    OUT_RESULT:= 'ERROR: OWNER NOT EXISTS!';
+    RETURN;
+  END;
+   BEGIN
+    SELECT UNIQUEKEY
+      INTO V_PLANTKEY
+      FROM PLANTS
+      WHERE TENANTKEY = V_TENANTKEY
+      AND UPPER(TRIM(LOCATION)) = UPPER(TRIM(IN_PLANT))
+      AND ROWNUM = 1;
+  EXCEPTION
+  WHEN NO_DATA_FOUND THEN
+    OUT_RESULT:= 'ERROR: PLANT NOT EXISTS!';
+  END;
+  
+  V_REPAIRSSQL := ' SELECT TENANTKEY, TAGNUMBER, SERIAL, EQUIPMENTKEY FROM '|| IN_VALVETABLE 
+    ||' WHERE MOSTRECENT=''T'' AND TENANTKEY = '''||V_TENANTKEY||''' AND OWNERKEY = '''||V_OWNERKEY
+    ||''' AND PLANTKEY = ''' || V_PLANTKEY|| '''';
+  
+  IF UPPER(IN_QUERYMODE) = 'ALL' THEN
+    V_REPAIRSSQL := V_REPAIRSSQL || ' AND UPPER(TRIM(TAGNUMBER)) = UPPER(TRIM( ''' || IN_TAGNUMBER|| ''')) '
+      || ' AND UPPER(TRIM(SERIAL)) = UPPER(TRIM( ''' || IN_SERIALNUMBER|| ''')) ';
+  ELSIF UPPER(IN_QUERYMODE) = 'SER' THEN 
+    V_REPAIRSSQL := V_REPAIRSSQL || ' AND UPPER(TRIM(SERIAL)) = UPPER(TRIM( ''' || IN_SERIALNUMBER|| ''')) ';
+  ELSE  --TAG NUMBER
+    V_REPAIRSSQL := V_REPAIRSSQL || ' AND UPPER(TRIM(TAGNUMBER)) = UPPER(TRIM( ''' || IN_TAGNUMBER|| ''')) ';
+  END IF;    
+  
+  
+  --dbms_output.put_line(V_REPAIRSSQL);
+  IF OUT_RESULT IS NULL THEN
+    OPEN OUT_CURSOR FOR V_REPAIRSSQL;
+  else
+    OPEN OUT_CURSOR FOR select 1 from dual where 1 = 2;
+  END IF;
+  
+END;

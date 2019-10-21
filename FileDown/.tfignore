@@ -1,0 +1,7 @@
+﻿# Ignore all files in the Temp sub-folder
+\DownloadFiles
+# Ignore .cpp files in the ProjA sub-folder and all its subfolders
+ProjA\*.cpp
+# 
+# Ignore .vspscc files in this folder and all its sub-folders
+*.vspscc

@@ -1,6 +1,3 @@
-# FileDownloader
-Service oriented .NET Core Web API app
-
 ## Description
 This Web API web app based on .NET Core 2.2 Framework, aim to download xml, word and zip file.
 

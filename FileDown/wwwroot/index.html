@@ -1,0 +1,86 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="./dist/styles/vkc_share.css">
+    <title>Home</title>
+</head>
+<body class="text-center">
+    <div class="container h-100">
+        <div class="row align-items-start h-25">
+            <div class="col">
+                <h1>Data Share API</h1>
+            </div>
+        </div>
+        <div class="row align-items-start h-75">
+            <div class="col col-4">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab"
+                       aria-controls="v-pills-home" aria-selected="true">Authenticate</a>
+                    <a class="nav-link" id="v-pills-profile-tab2" data-toggle="pill" href="#v-pills-profile" role="tab"
+                       aria-controls="v-pills-profile" aria-selected="false">ValveData</a>
+                    <a class="nav-link" id="v-pills-profile-tab3" href="/swagger/index.html" role="tab"
+                       aria-controls="v-pills-profile" aria-selected="false" target="_blank">Swagger API</a>
+                </div>
+            </div>
+            <div class="col col-6">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                        User Name: <input type="text" id="inputUser" class="form-control" placeholder="User" required autofocus value="">
+                        Tenant Code: <input type="text" id="inputTenant" class="form-control" placeholder="Tenant Code" required value="">
+                        Password: <input type="password" id="inputPassword" class="form-control" placeholder="Password" required value="">
+                        <br>
+                        <div class="btn btn-lg btn-primary" type="submit" onclick="auth.login()">Get Token</div>
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                        Token: <input type="text" id="inputToken" class="form-control" placeholder="Get Token via Authenticate API" required autofocus>
+                        <h5>Parameters</h5>
+                        <div class="row">
+                            <div class="col-8 col-sm-6">
+                                Owner Name: <input type="text" id="inputOwner" class="form-control" placeholder="OwnerName" required value="">
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                Plant Location: <input type="text" id="inputPlant" class="form-control" placeholder="PlantLocation" required value="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-8 col-sm-6">
+                                Tag Number: <input type="text" id="inputTag" class="form-control" placeholder="TagNumber" required value="">
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                Serial Number: <input type="text" id="inputSerial" class="form-control" placeholder="Serial Number" required value="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-8 col-sm-6">
+                                Valve Type: <input type="text" id="inputValveType" class="form-control" value="RV" required>
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                File Type: <input type="text" id="inputFileType" class="form-control" value="XML" required>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="btn btn-lg btn-primary" type="submit" onclick="auth.getFileName()">Get Data</div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col col-12">
+                <p class="mt-5 mb-3 text-muted">&copy; 2019-2020</p>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="./dist/scripts/axios.min.js"></script>
+    <script src="./dist/scripts/api.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
